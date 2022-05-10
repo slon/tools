@@ -118,6 +118,7 @@ func DefaultOptions() *Options {
 					ExperimentalPackageCacheKey: true,
 					MemoryMode:                  ModeNormal,
 					DirectoryFilters:            []string{"-node_modules"},
+					ImportCacheFilters:          []string{},
 					TemplateExtensions:          []string{},
 				},
 				UIOptions: UIOptions{
@@ -235,6 +236,10 @@ type BuildOptions struct {
 	//
 	// Include only project_a, but not node_modules inside it: `-`, `+project_a`, `-project_a/node_modules`
 	DirectoryFilters []string
+
+	// ImportCacheFilters can be used to exclude unwanted directories from the
+	// imports cache.
+	ImportCacheFilters []string
 
 	// TemplateExtensions gives the extensions of file names that are treateed
 	// as template files. (The extension
@@ -741,6 +746,7 @@ func (o *Options) Clone() *Options {
 	result.SetEnvSlice(o.EnvSlice())
 	result.BuildFlags = copySlice(o.BuildFlags)
 	result.DirectoryFilters = copySlice(o.DirectoryFilters)
+	result.ImportCacheFilters = copySlice(o.ImportCacheFilters)
 
 	copyAnalyzerMap := func(src map[string]*Analyzer) map[string]*Analyzer {
 		dst := make(map[string]*Analyzer)
@@ -836,6 +842,22 @@ func (o *Options) set(name string, value interface{}, seen map[string]struct{}) 
 			filters = append(filters, strings.TrimRight(filepath.FromSlash(filter), "/"))
 		}
 		o.DirectoryFilters = filters
+	case "importCacheFilters":
+		ifilters, ok := value.([]interface{})
+		if !ok {
+			result.errorf("invalid type %T, expect list", value)
+			break
+		}
+		var filters []string
+		for _, ifilter := range ifilters {
+			filter := fmt.Sprint(ifilter)
+			if filter == "" || (filter[0] != '+' && filter[0] != '-') {
+				result.errorf("invalid filter %q, must start with + or -", filter)
+				return result
+			}
+			filters = append(filters, strings.TrimRight(filepath.FromSlash(filter), "/"))
+		}
+		o.ImportCacheFilters = filters
 	case "memoryMode":
 		if s, ok := result.asOneOf(
 			string(ModeNormal),

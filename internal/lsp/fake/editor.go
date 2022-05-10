@@ -126,6 +126,7 @@ type EditorConfig struct {
 
 	ImportShortcut                 string
 	DirectoryFilters               []string
+	ImportCacheFilters             []string
 	VerboseOutput                  bool
 	ExperimentalUseInvalidMetadata bool
 }
@@ -242,6 +243,9 @@ func (e *Editor) configuration() map[string]interface{} {
 	}
 	if e.Config.DirectoryFilters != nil {
 		config["directoryFilters"] = e.Config.DirectoryFilters
+	}
+	if e.Config.ImportCacheFilters != nil {
+		config["importCacheFilters"] = e.Config.ImportCacheFilters
 	}
 	if e.Config.ExperimentalUseInvalidMetadata {
 		config["experimentalUseInvalidMetadata"] = true

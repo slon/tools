@@ -72,6 +72,13 @@ Include only project_a, but not node_modules inside it: `-`, `+project_a`, `-pro
 
 Default: `["-node_modules"]`.
 
+#### **importCacheFilters** *[]string*
+
+importCacheFilters can be used to exclude unwanted directories from the
+imports cache.
+
+Default: `[]`.
+
 #### **templateExtensions** *[]string*
 
 templateExtensions gives the extensions of file names that are treateed

@@ -27,6 +27,13 @@ var GeneratedAPIJSON = &APIJSON{
 				Hierarchy: "build",
 			},
 			{
+				Name:      "importCacheFilters",
+				Type:      "[]string",
+				Doc:       "importCacheFilters can be used to exclude unwanted directories from the\nimports cache.\n",
+				Default:   "[]",
+				Hierarchy: "build",
+			},
+			{
 				Name:      "templateExtensions",
 				Type:      "[]string",
 				Doc:       "templateExtensions gives the extensions of file names that are treateed\nas template files. (The extension\nis the part of the file name after the final dot.)\n",

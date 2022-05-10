@@ -223,6 +223,10 @@ func (s *Session) createView(ctx context.Context, name string, folder span.URI, 
 		ctx: backgroundCtx,
 		processEnv: &imports.ProcessEnv{
 			GocmdRunner: s.gocmdRunner,
+
+			FilterPath: func(path string) bool {
+				return source.FiltersDisallow(path, options.ImportCacheFilters)
+			},
 		},
 	}
 	v.snapshot = &snapshot{

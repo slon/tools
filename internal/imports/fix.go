@@ -807,6 +807,8 @@ type ProcessEnv struct {
 	ModFlag    string
 	ModFile    string
 
+	FilterPath func(string) bool
+
 	// Env overrides the OS environment, and can be used to specify
 	// GOPROXY, GO111MODULE, etc. PATH cannot be set here, because
 	// exec.Command will not honor it.
